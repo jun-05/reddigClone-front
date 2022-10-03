@@ -1,6 +1,7 @@
 export interface User{
     username:string;
     email:string;
-    createdAt:string;
-    updatedAt:string;
+    password:string;
+    createdAt?:string;
+    updatedAt?:string;
 }

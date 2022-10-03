@@ -2,7 +2,11 @@ import Axios from "axios";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import React, { FormEvent, useState } from "react";
+import { useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import InputGroup from "../components/InputGroup";
+import { RootState } from "../modules";
+import { registerThunk } from "./../modules/register/thunks";
 
 const Register = () => {
   const [email, setEmail] = useState("");
@@ -12,7 +16,14 @@ const Register = () => {
 
   const router = useRouter();
 
+  const dispatch = useDispatch();
+  const { error } = useSelector((state: RootState) => state.register);
+
   const handleSubmit = async (e: FormEvent) => {
+    e.preventDefault();
+    dispatch(registerThunk({ email, username, password }));
+    setErrors(error?.response?.data || {});
+    /**
     e.preventDefault();
     try {
       const res = await Axios.post("/auth/register", {
@@ -25,6 +36,7 @@ const Register = () => {
       console.log(error);
       setErrors(error?.response?.data || {});
     }
+     */
   };
 
   return (

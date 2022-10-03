@@ -1,7 +1,7 @@
 import Axios from "axios";
 import Link from "next/link";
 import { useRouter } from "next/router";
-import React, { FormEvent, useState } from "react";
+import React, { FormEvent, useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { useDispatch } from "react-redux";
 import InputGroup from "../components/InputGroup";
@@ -17,12 +17,12 @@ const Register = () => {
   const router = useRouter();
 
   const dispatch = useDispatch();
-  const { error } = useSelector((state: RootState) => state.register);
+  const { error, data } = useSelector((state: RootState) => state.register);
 
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
     dispatch(registerThunk({ email, username, password }));
-    setErrors(error?.response?.data || {});
+
     /**
     e.preventDefault();
     try {
@@ -38,6 +38,15 @@ const Register = () => {
     }
      */
   };
+
+  useEffect(() => {
+    if (data !== null) {
+      console.log(data);
+      console.log("가입 완료");
+    }
+
+    setErrors(error?.response.data || {});
+  }, [error, data]);
 
   return (
     <div className="bg-white">

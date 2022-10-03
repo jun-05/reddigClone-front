@@ -17,11 +17,13 @@ function register(state:RegisterState=initialState,action:RegisterAction){
         case REGISTER_SUCCESS: return {
             ...state,
             loading:false,
-            data:action.payload
+            data:action.payload,
+            error:null
         }
         case REGISTER_ERROR: return {
             ...state,
             loading:false,
+            data:null,
             error:action.payload
         }
         default:

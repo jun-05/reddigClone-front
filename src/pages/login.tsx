@@ -1,19 +1,28 @@
-import React, { FormEvent, useState } from "react";
+import React, { FormEvent, useEffect, useState } from "react";
 import InputGroup from "../components/InputGroup";
 import Link from "next/link";
 import Axios from "axios";
 import Router from "next/router";
 import { useAuthDispatch } from "./../context/auth";
+import { loginThunk } from "../modules/login/thunks";
+import { useSelector } from "react-redux";
+import { RootState } from "../modules";
+import { useDispatch } from "react-redux";
 
 export const Login = () => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [errors, setErrors] = useState<any>({});
-
-  const dispatch = useAuthDispatch();
+  const dispatch = useDispatch();
+  const { error, data } = useSelector((state: RootState) => state.login);
 
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
+    dispatch(loginThunk({ username, password }));
+
+    {
+      /**
+      e.preventDefault();
     try {
       const res = await Axios.post(
         "/auth/login",
@@ -31,7 +40,18 @@ export const Login = () => {
       console.error(error);
       setErrors(error?.response?.data || {});
     }
+    */
+    }
   };
+
+  useEffect(() => {
+    if (data !== null) {
+      console.log(data);
+      console.log("로그인");
+    }
+
+    setErrors(error?.response.data || {});
+  }, [error, data]);
 
   return (
     <div className="bg-white">
